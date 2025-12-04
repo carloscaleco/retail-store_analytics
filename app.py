@@ -49,12 +49,23 @@ TRAJ_FILE = 'trajectories.csv'
 TRACKER_FILE = "my_tracker.yaml"
 
 # ============================================
-# 3. SIDEBAR
+# 3. LIMPEZA AUTOMÁTICA NA INICIALIZAÇÃO
+# ============================================
+# Apaga os ficheiros de log e trajectórias sempre que a app reinicia
+if 'app_initialized' not in st.session_state:
+    if os.path.exists(LOG_FILE):
+        os.remove(LOG_FILE)
+    if os.path.exists(TRAJ_FILE):
+        os.remove(TRAJ_FILE)
+    st.session_state['app_initialized'] = True
+
+# ============================================
+# 4. SIDEBAR
 # ============================================
 st.title("🏪 Retail Store Analytics")
 st.sidebar.header("Definições")
 
-run_system = st.sidebar.toggle("Ligar Sistema", value=False)
+run_system = st.sidebar.toggle("Ligar Sistema", value=True)
 enable_trajectory = st.sidebar.checkbox("Mostrar Trajetórias", value=False)
 conf_threshold = st.sidebar.slider("Confiança", 0.0, 1.0, 0.25)
 line_position = st.sidebar.slider("Posição Linha Entrada", 0, 600, 240)
@@ -68,7 +79,7 @@ if st.sidebar.button("⚠️ Reset Total"):
     st.rerun()
 
 # ============================================
-# 4. FUNÇÕES
+# 5. FUNÇÕES
 # ============================================  
 @st.cache_resource
 def load_model(model_name):
@@ -138,7 +149,7 @@ def render_dashboard():
         st.info("⚠️ Sem dados recolhidos ainda. Ligue o sistema para gerar estatísticas.")
 
 # ============================================
-# 5. LAYOUT FIXO (ABAS)
+# 6. LAYOUT FIXO (ABAS)
 # ============================================
 tab1, tab2 = st.tabs(["📹 Monitorização", "📈 Dashboard Inteligente"])
 
@@ -193,7 +204,7 @@ with tab2:
         render_dashboard()
 
 # ============================================
-# 6. LÓGICA DE PROCESSAMENTO (LOOP)
+# 7. LÓGICA DE PROCESSAMENTO (LOOP)
 # ============================================
 if run_system:
     if not os.path.exists(LOG_FILE):
