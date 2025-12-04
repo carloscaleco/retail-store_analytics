@@ -1,0 +1,13 @@
+tracker_type: botsort # tipo de tracker: bytetrack ou botsort
+track_high_thresh: 0.5  # limiar para a primeira associação
+track_low_thresh: 0.1   # limiar para a segunda associação
+new_track_thresh: 0.6   # limiar para iniciar um novo rastro
+track_buffer: 60        # <--- AUMENTADO (Padrão é 30) - Memória do tracker
+match_thresh: 0.7       # limiar para correspondência
+# Parâmetros que faltavam e causaram o erro:
+fuse_score: True        # Se usa a confiança na associação
+gmc_method: sparseOptFlow # Correção de movimento da câmara (Global Motion Compensation)
+proximity_thresh: 0.6   # Limiar de proximidade
+appearance_thresh: 0.25 # Limiar de aparência
+with_reid: False        # Re-identificação (desativado por padrão no YOLOv8 para velocidade) - Isto ativa a comparação visual, não apenas posicional
+# model: osnet_x0_25_msmt17.pt # Modelo de ReID
