@@ -132,7 +132,7 @@ pip install insightface onnxruntime
 retail-analytics/
 │
 ├── projecto_final.py         # Script principal (OpenCV standalone)
-├── app.py                     # Dashboard Streamlit
+├── app.py                     # Dashboard Streamlit∏P
 ├── ideiasProjecto.md          # Notas de desenvolvimento
 │
 ├── Videos/
