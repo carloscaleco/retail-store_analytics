@@ -1,2 +1,3 @@
 /live_frame.jpg
-*.csv
+occupancy_log.csv
+trajectories.csv
