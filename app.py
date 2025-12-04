@@ -10,9 +10,14 @@ from ultralytics import YOLO
 import plotly.express as px
 import plotly.graph_objects as go
 
-# ==========================================
+# ============================================
+# 0. EXECUÇÃO INICIAL DO STREAMLIT NO TERMINAL
+# streamlit run app.py
+# ============================================
+
+# ============================================
 # 1. CONFIGURAÇÃO E CSS
-# ==========================================
+# ============================================
 st.set_page_config(page_title="Retail Analytics AI", page_icon="🏪", layout="wide")
 
 st.markdown("""
@@ -24,9 +29,9 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# ==========================================
+# ============================================
 # 2. INICIALIZAÇÃO DE VARIÁVEIS DE SESSÃO
-# ==========================================
+# ============================================
 if 'count_in' not in st.session_state: st.session_state['count_in'] = 0
 if 'count_out' not in st.session_state: st.session_state['count_out'] = 0
 if 'occupancy' not in st.session_state: st.session_state['occupancy'] = 0
@@ -43,13 +48,13 @@ LOG_FILE = 'occupancy_log.csv'
 TRAJ_FILE = 'trajectories.csv'
 TRACKER_FILE = "my_tracker.yaml"
 
-# ==========================================
+# ============================================
 # 3. SIDEBAR
-# ==========================================
+# ============================================
 st.title("🏪 Retail Store Analytics")
 st.sidebar.header("Definições")
 
-run_system = st.sidebar.toggle("Ligar Sistema", value=True)
+run_system = st.sidebar.toggle("Ligar Sistema", value=False)
 enable_trajectory = st.sidebar.checkbox("Mostrar Trajetórias", value=False)
 conf_threshold = st.sidebar.slider("Confiança", 0.0, 1.0, 0.25)
 line_position = st.sidebar.slider("Posição Linha Entrada", 0, 600, 240)
@@ -62,9 +67,9 @@ if st.sidebar.button("⚠️ Reset Total"):
     if os.path.exists(LOG_FILE): os.remove(LOG_FILE)
     st.rerun()
 
-# ==========================================
+# ============================================
 # 4. FUNÇÕES
-# ==========================================
+# ============================================  
 @st.cache_resource
 def load_model(model_name):
     return YOLO(model_name)
@@ -132,9 +137,9 @@ def render_dashboard():
     else:
         st.info("⚠️ Sem dados recolhidos ainda. Ligue o sistema para gerar estatísticas.")
 
-# ==========================================
+# ============================================
 # 5. LAYOUT FIXO (ABAS)
-# ==========================================
+# ============================================
 tab1, tab2 = st.tabs(["📹 Monitorização", "📈 Dashboard Inteligente"])
 
 with tab1:
@@ -181,9 +186,15 @@ with tab1:
         status_spot.markdown(f"**Nível:** <span style='color:{c_hex}; font-weight:bold'>{s_txt}</span>", unsafe_allow_html=True)
         status_spot.markdown(custom_progress_bar(occ_pct, c_hex), unsafe_allow_html=True)
 
-# ==========================================
+with tab2:
+    if st.button("🔄 Atualizar Relatório"):
+        render_dashboard()
+    else:
+        render_dashboard()
+
+# ============================================
 # 6. LÓGICA DE PROCESSAMENTO (LOOP)
-# ==========================================
+# ============================================
 if run_system:
     if not os.path.exists(LOG_FILE):
         with open(LOG_FILE, 'w', newline='') as f:
@@ -331,8 +342,3 @@ if run_system:
 
     cap.release()
 
-with tab2:
-    if st.button("🔄 Atualizar Relatório"):
-        render_dashboard()
-    else:
-        render_dashboard()
